@@ -1,6 +1,5 @@
 var readlineSync = require('readline-sync');
 
-
 /*
 C w h           Should create a new canvas of width w and height h.
 L x1 y1 x2 y2   Should create a new line from (x1,y1) to (x2,y2). Currently only
@@ -17,19 +16,19 @@ Q               Should quit the program.
 
 var answer = ''
 var cmd = ''
+var LINE = 'X'
+var BORDER_UP = '-'
+var BORDER_SIDE = '|'
 
 class Canvas {
-    var LINE = 'X'
-    var BORDER_UP = '-'
-    var BORDER_SIDE = '|'
+
 
     constructor() {
         this.state = []
         this.visited = []
-
     }
-    bucketfill(x, y, c, lvl) {
 
+    bucketfill(x, y, c) {
         x = parseInt(x)
         y = parseInt(y)
         var curNode = x + "." + y
@@ -39,12 +38,6 @@ class Canvas {
         }
 
         this.visited.push(curNode)
-
-
-
-        if (lvl < 0) {
-            return
-        }
 
         if (x == 0 || y == 0 || x == this.state[0].length || y == this.state.length) {
             return
@@ -66,10 +59,10 @@ class Canvas {
         }
 
         //this.draw()
-        this.bucketfill(x - 1, y, c, lvl - 1)
-        this.bucketfill(x + 1, y, c, lvl - 1)
-        this.bucketfill(x, y - 1, c, lvl - 1)
-        this.bucketfill(x, y + 1, c, lvl - 1)
+        this.bucketfill(x - 1, y, c)
+        this.bucketfill(x + 1, y, c)
+        this.bucketfill(x, y - 1, c)
+        this.bucketfill(x, y + 1, c)
     }
 
     create(W, H) {
@@ -175,7 +168,7 @@ while (cmd[0] != "Q") {
             break;
         case "B":
             c.visited = []
-            c.bucketfill(cmd[1], cmd[2], cmd[3], 100)
+            c.bucketfill(cmd[1], cmd[2], cmd[3])
             c.draw()
             break;
 
