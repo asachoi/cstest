@@ -1,5 +1,5 @@
 var assert = require('assert');
-var c = require('./canvas');
+var c = require('../canvas');
 
 
 

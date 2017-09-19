@@ -15,9 +15,9 @@ libraries used
 
 Usage
 ===============
-install: npm i
-run: node app
-test: npm test
+1. install: npm i
+2. run: node app
+3. test: npm test
 
 Files
 ==============
