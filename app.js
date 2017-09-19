@@ -31,17 +31,33 @@ while (cmd[0] != "Q") {
             c.draw()
             break;
         case "L":
-            c.line(cmd[1], cmd[2], cmd[3], cmd[4])
-            c.draw()
+
+            try {
+              //x1, y1, y2, y2
+                c.line(cmd[1], cmd[2], cmd[3], cmd[4])
+                c.draw()
+            } catch (e) {
+                console.log(e.message)
+            }
             break;
         case "R":
-            c.rectangle(cmd[1], cmd[2], cmd[3], cmd[4])
-            c.draw()
+            try {
+                //x1, y1, y2, y2
+                c.rectangle(cmd[1], cmd[2], cmd[3], cmd[4])
+                c.draw()
+            } catch (e) {
+                console.log(e.message)
+            }
             break;
         case "B":
-            c.visited = []
-            c.bucketfill(cmd[1], cmd[2], cmd[3])
-            c.draw()
+            try{
+                c.visited = []
+                //x, y, colour
+                c.bucketfill(cmd[1], cmd[2], cmd[3])
+                c.draw()
+              } catch (e) {
+                  console.log(e.message)
+            }
             break;
 
     }

@@ -5,7 +5,9 @@ module.exports =
    BORDER_UP :'-',
    BORDER_SIDE : '|',
    state: [],
-   visited: [],
+   visited:[],
+
+
 
   max_X: function() {
     return this.state[0].length
@@ -13,31 +15,46 @@ module.exports =
   max_Y: function() {
     return this.state.length
   },
+  hash: function(symbol) { //testing function, return count of input symbol
+    var sum = 0;
+    this.state.forEach(
+      function(line) {
+        sum += line.filter(
+          function(p) {
+            return p == symbol
+          }
+        ).length
+      }
+    )
+    return sum;
+  },
 
   bucketfill: function(x, y, c) {
-      x = parseInt(x)
-      y = parseInt(y)
+      x = parseInt(x) //ensure the data type
+      y = parseInt(y) //ensure the data type
       var curNode = x + "." + y
 
       if (this.visited.indexOf(curNode) > 0) {
-          return
+          return //stop if eval already
       }
 
       this.visited.push(curNode)
 
+
+      if(x > this.max_X() || y > this.max_Y()) {
+          throw new Error("Draw in the canvas only")
+      }
       if (x == 0 || y == 0 || x == this.max_X() || y == this.max_Y()) {
-          return
+          return //reach boundary
       }
 
-      if (this.state[y][x] == LINE || this.state[y][x] == c || this.state[y][x] == '-' || this.state[y][x] == '|') {
-          return
+      if (this.state[y][x] == this.LINE || this.state[y][x] == c || this.state[y][x] == this.BORDER_UP || this.state[y][x] == this.BORDER_SIDE) {
+          return //stop if filled already or reach the borderss
       }
 
-      this.state[y][x] = c
+      this.state[y][x] = c //fill character
 
-
-      //this.draw()
-      this.bucketfill(x - 1, y, c)
+      this.bucketfill(x - 1, y, c) //spread the eval to neighborhood
       this.bucketfill(x + 1, y, c)
       this.bucketfill(x, y - 1, c)
       this.bucketfill(x, y + 1, c)
@@ -46,31 +63,30 @@ module.exports =
   create: function(W, H) {
       var border = []
 
-
-      for (var i = 0; i < W; i++) {
+      for (var i = 0; i < W; i++) { //create the updown border
           border.push('-')
       }
-      border = border.concat([this.BORDER_UP, this.BORDER_UP])
+      border = border.concat([this.BORDER_UP, this.BORDER_UP]) //add two pixels
 
-      this.state.push(border)
+      this.state.push(border) //top border
 
       for (var i = 0; i < H; i++) {
           var line = [];
-          line.push(this.BORDER_SIDE)
+          line.push(this.BORDER_SIDE) //border left
           for (var j = 0; j < W; j++) {
               line.push(' ')
           }
-          line.push(this.BORDER_SIDE)
+          line.push(this.BORDER_SIDE) //right border
           this.state.push(line)
       }
 
-      this.state.push(border)
+      this.state.push(border) //bottom border
   },
   line: function(x1, y1, x2, y2) {
       if (x1 != x2 && y1 != y2)
-        return
+        throw new Error("Currently only horizontal or vertical lines are supported")
       if (x1 > this.max_X() || x2 > this.max_X() || y1 > this.max_Y() || y2 > this.max_Y())
-        return
+        throw new Error("Draw in the canvas only")
 
       if (x1 == x2) {
           var s = Math.min(y1, y2)
@@ -93,12 +109,12 @@ module.exports =
   rectangle: function(x1, y1, x2, y2) {
 
     if (x1 > this.max_X() || x2 > this.max_X() || y1 > this.max_Y() || y2 > this.max_Y())
-      return
+      throw new Error("Draw in the canvas only")
 
-      this.line(x1, y1, x1, y2)
-      this.line(x2, y1, x2, y2)
-      this.line(x1, y1, x2, y1)
-      this.line(x1, y2, x2, y2)
+    this.line(x1, y1, x1, y2)
+    this.line(x2, y1, x2, y2)
+    this.line(x1, y1, x2, y1)
+    this.line(x1, y2, x2, y2)
   },
   draw: function() {
       this.state.forEach(
