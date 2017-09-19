@@ -21,6 +21,6 @@ test: npm test
 
 Files
 ==============
-test.js //test script
-app.js //console js File
-canvas.js //core logic of drawing program
+1. test.js //test script
+2. app.js //console js File
+3. canvas.js //core logic of drawing program
